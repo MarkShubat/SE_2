@@ -91,8 +91,8 @@ for img_set in images_set_2:
         image_pillow = Image.fromarray(tmp)
         slice_image(image_pillow, 224, tmp_set)
     print(len(tmp_set))
-    while(len(tmp_set) < 3270):
-      tmp_set = tmp_set + tmp_set
+    while (len(tmp_set) < 3270):
+        tmp_set = tmp_set + tmp_set
     images_set_3.append(tmp_set[0: 512])
 images_set_2 = []
 
@@ -124,7 +124,8 @@ for dir in classes:
 
 for i in range(3):
     for j in range(len(images_set_4[i])):
-        cv2.imwrite(f'/content/images/{classes[i]}/{j}.jpg', images_set_4[i][j])
+        cv2.imwrite(f'/content/images/{classes[i]}/{j}.jpg',
+                    images_set_4[i][j])
 
 # Каталог с набором данных
 data_dir = '/content/images'
@@ -137,18 +138,18 @@ early_stop = EarlyStopping(
     restore_best_weights=True
 )
 
-classes = [ 'Amarant', 'Cabbage', 'Watercress']
+classes = ['Amarant', 'Cabbage', 'Watercress']
 
 datagen = ImageDataGenerator(
     rescale=1./255,
-    validation_split=0.2 )
+    validation_split=0.2)
 
 train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(224, 224),
     batch_size=32,
     class_mode='categorical',  # Режим классификации
-    classes = classes,
+    classes=classes,
     subset='training')
 
 test_data_generator = datagen.flow_from_directory(
@@ -156,7 +157,7 @@ test_data_generator = datagen.flow_from_directory(
     target_size=(224, 224),  # Размер изображений
     batch_size=32,  # Размер пакета
     class_mode='categorical',  # Режим классификации
-    classes = classes,
+    classes=classes,
     subset='validation'  # Определение тестовой выборки
 )
 
@@ -180,11 +181,11 @@ model.add(Conv2D(128, (3, 3), activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 model.add(Flatten())
 model.add(Dense(512, activation='relu'))
-model.add(Dense(3, activation='softmax')) #sigmoid
+model.add(Dense(3, activation='softmax'))  # sigmoid
 model.summary()
 model.compile(optimizer='adam',
-          loss='categorical_crossentropy',
-          metrics=['accuracy'])
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
 
 history = model.fit(
     train_generator,
@@ -193,7 +194,7 @@ history = model.fit(
     callbacks=[early_stop]
     )
 
-model.evaluate(test_data_generator, verbose = 1)
+model.evaluate(test_data_generator, verbose=1)
 
 plt.plot(history.history['accuracy'],
          label='Доля правильных ответов на обучающем наборе')
