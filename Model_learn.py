@@ -22,6 +22,18 @@ directory_to_extract_to = '/content/drive/My Drive/extracted_images'
 image_df = pd.DataFrame(columns=['X', 'y'])
 images_set = []
 
+
+def cv2_to_pil(img_cv2):
+    img_cv2 = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
+    image_pillow = Image.fromarray(img_cv2)
+    return image_pillow
+
+
+def pil_to_cv2(img_pil):
+    tmp = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+    return tmp
+
+
 for e in classes:
     dir = directory_to_extract_to + f'/{e}'
     # Получите список всех файлов изображений в директории
@@ -138,7 +150,6 @@ early_stop = EarlyStopping(
     restore_best_weights=True
 )
 
-classes = ['Amarant', 'Cabbage', 'Watercress']
 
 datagen = ImageDataGenerator(
     rescale=1./255,
