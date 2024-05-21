@@ -9,23 +9,24 @@ import cv2
 class Item(BaseModel):
     text: str
 
+
 def cv2_to_pil(img_cv2):
     img_cv2 = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
     image_pillow = Image.fromarray(img_cv2)
     return image_pillow
 
+
 def pil_to_cv2(img_pil):
     tmp = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
     return tmp
 
-def crop_img( ):
-    chunk_size = 224
+
+def crop_img():
     img = Image.open('document_2.jpg')
     tmp = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     height, width, chans = tmp.shape
     image = tmp
     
-
     # Получение размеров изображения
     height, width = image.shape[:2]
 
@@ -43,6 +44,7 @@ def crop_img( ):
     cropped_image = image[y1:y2, x1:x2]
     return cropped_image
 
+
 def slice_image(image_PIL, chunk_size, tmp_set):
     image = image_PIL
     width, height = image.size
@@ -51,7 +53,7 @@ def slice_image(image_PIL, chunk_size, tmp_set):
         for y in range(0, height, chunk_size):
             box = (x, y, x + chunk_size, y + chunk_size)
             region = image.crop(box)
-            #region.save(f'chunk_{x}_{y}.png')
+            # region.save(f'chunk_{x}_{y}.png')
             tmp_set.append(region)
     return tmp
 
@@ -62,7 +64,7 @@ tmp = []
 
 def read_and_preprocess_image(image):
     img = image
-    #img = img.resize((224, 224))
+    # img = img.resize((224, 224))
     img_array = np.array(img)
     img_array = img_array / 255.0
     img_array = np.expand_dims(img_array, axis=0)
@@ -72,13 +74,11 @@ def read_and_preprocess_image(image):
 def load_model():
     return tf.keras.models.load_model("proj.h5")
 
-    prediction = model.predict(tensor)
-
     
 model = load_model()
-image = read_and_preprocess_image(slice_image(cv2_to_pil(crop_img()),224, tmp)[0])
-classes = ['Amarant', 'Cabbage', 'Watercress']
-   
+image = read_and_preprocess_image(
+    slice_image(cv2_to_pil(crop_img()), 224, tmp)[0])
+classes = ['Amarant', 'Cabbage', 'Watercress']   
 app = FastAPI()
 
 
