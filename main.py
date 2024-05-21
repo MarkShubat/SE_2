@@ -26,7 +26,6 @@ def crop_img():
     tmp = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     height, width, chans = tmp.shape
     image = tmp
-    
     # Получение размеров изображения
     height, width = image.shape[:2]
 
@@ -79,7 +78,7 @@ def load_model():
 model = load_model()
 image = read_and_preprocess_image(
     slice_image(cv2_to_pil(crop_img()), 224, tmp)[0])
-classes = ['Amarant', 'Cabbage', 'Watercress']   
+classes = ['Amarant','Cabbage','Watercress']   
 app = FastAPI()
 
 
