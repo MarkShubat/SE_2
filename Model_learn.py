@@ -9,7 +9,7 @@ import zipfile
 from zipfile import ZipFile
 from io import BytesIO
 from PIL import Image
-#from google.colab import drive
+# from google.colab import drive
 import glob
 import os
 from re import X
@@ -78,7 +78,7 @@ def slice_image(image_PIL, chunk_size, tmp_set):
         for y in range(0, height, chunk_size):
             box = (x, y, x + chunk_size, y + chunk_size)
             region = image.crop(box)
-            #region.save(f'chunk_{x}_{y}.png')
+            # region.save(f'chunk_{x}_{y}.png')
             tmp_set.append(region)
 
 
