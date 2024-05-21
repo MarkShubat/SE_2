@@ -62,6 +62,7 @@ chunk_size = 224
 
 tmp = []
 
+
 def read_and_preprocess_image(image):
     img = image
     # img = img.resize((224, 224))
@@ -74,7 +75,7 @@ def read_and_preprocess_image(image):
 def load_model():
     return tf.keras.models.load_model("proj.h5")
 
-    
+
 model = load_model()
 image = read_and_preprocess_image(
     slice_image(cv2_to_pil(crop_img()), 224, tmp)[0])
