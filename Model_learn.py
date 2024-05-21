@@ -32,10 +32,10 @@ for e in classes:
 
     images_set.append(images)
 
-  for dirname, _, filenames in os.walk('/content'):
-      for filename in filenames:
-          print(os.path.join(dirname, filename))
-          # Проходим по всем файлам в архиве
+for dirname, _, filenames in os.walk('/content'):
+    for filename in filenames:
+         print(os.path.join(dirname, filename))
+         # Проходим по всем файлам в архиве
 
 
 def crop_img(image_CV2, size_x, size_y):
