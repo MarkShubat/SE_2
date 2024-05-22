@@ -49,7 +49,7 @@ for dirname, _, filenames in os.walk('/content'):
         # Проходим по всем файлам в архиве
 
 
-def crop_img(image_CV2, size_x, size_y):
+def crop_img(image_CV2):
     image = image_CV2
 
     # Получение размеров изображения
@@ -58,8 +58,8 @@ def crop_img(image_CV2, size_x, size_y):
     # Определение размера центральной части
     center_x, center_y = width // 2, height // 2
 
-    crop_size_x = (size_x // 224 - 1) * 224
-    crop_size_y = (size_y // 224 - 2) * 224
+    crop_size_x = (width // 224 - 1) * 224
+    crop_size_y = (height // 224 - 2) * 224
 
     # Определение координат для обрезки
     x1, y1 = center_x - crop_size_x // 1, center_y - crop_size_y // 1
@@ -88,9 +88,7 @@ images_set_2 = []
 for img_set in images_set:
     tmp_set = []
     for img in img_set:
-        tmp = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-        height, width, chans = tmp.shape
-        image = crop_img(tmp, height, width)
+        image = crop_img(pil_to_cv2(img))
         tmp_set.append(image)
     images_set_2.append(tmp_set)
 images_set = []
@@ -99,9 +97,7 @@ images_set_3 = []
 for img_set in images_set_2:
     tmp_set = []
     for img in img_set:
-        tmp = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        image_pillow = Image.fromarray(tmp)
-        slice_image(image_pillow, 224, tmp_set)
+        slice_image(cv2_to_pil(img), 224, tmp_set)
     print(len(tmp_set))
     while (len(tmp_set) < 3270):
         tmp_set = tmp_set + tmp_set
