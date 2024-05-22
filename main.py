@@ -5,11 +5,11 @@ import tensorflow as tf
 from PIL import Image
 import cv2
 from collections import Counter
-import json
 
 
 class Item(BaseModel):
     text: str
+
 
 classes = ['Amarant', 'Cabbage', 'Watercress']
 
@@ -26,7 +26,7 @@ def pil_to_cv2(img_pil):
 
 
 def crop_img(number):
-    docs = ['document_1.jpg','document_2.jpg','document_3.jpg']   
+    docs = ['document_1.jpg', 'document_2.jpg', 'document_3.jpg']
     img = Image.open(docs[number])
     tmp = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     height, width, chans = tmp.shape
@@ -93,7 +93,7 @@ def predict(number):
     counter = Counter(predictions)
     most_common_element = counter.most_common(1)[0][0]
     return most_common_element
-    
+
 
 app = FastAPI()
 
@@ -107,4 +107,3 @@ def root():
 def predict1(item: Item):
     number = predict(int(item.text) - 1)
     return classes[number]
-
