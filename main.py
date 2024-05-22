@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 import cv2
+from collections import Counter
 
 
 class Item(BaseModel):
@@ -76,8 +77,13 @@ def load_model():
 
 
 model = load_model()
-image = read_and_preprocess_image(
-    slice_image(cv2_to_pil(crop_img()), 224, tmp)[0])
+images = slice_image(cv2_to_pil(crop_img()),224, tmp)
+predictions = []
+for img in images:
+    image = read_and_preprocess_image(img)
+    predictions.append(np.argmax(model.predict(image)))
+counter = Counter(predictions)
+most_common_element = counter.most_common(1)[0][0]
 classes = ['Amarant', 'Cabbage', 'Watercress']
 app = FastAPI()
 
@@ -89,5 +95,4 @@ def root():
 
 @app.post("/predict/")
 def predict(item: Item):
-    prediction = model.predict(image)
-    return classes[np.argmax(prediction)]
+    return classes[most_common_element]
