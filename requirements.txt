@@ -4,4 +4,4 @@ fastapi
 tensorflow
 Pillow
 opencv-python
-collections
+
