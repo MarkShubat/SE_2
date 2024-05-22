@@ -41,7 +41,7 @@ def crop_img(number):
     crop_size_y = (width // 224 - 2) * 224
     crop_size_x = 224 if crop_size_x <= 0 else crop_size_x
     crop_size_y = 224 if crop_size_y <= 0 else crop_size_y
-    
+      
     # Определение координат для обрезки
     x1, y1 = center_x - crop_size_x // 1, center_y - crop_size_y // 1
     x2, y2 = center_x + crop_size_x // 1, center_y + crop_size_y // 1
