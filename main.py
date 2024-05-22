@@ -5,10 +5,13 @@ import tensorflow as tf
 from PIL import Image
 import cv2
 from collections import Counter
+import json
 
 
 class Item(BaseModel):
     text: str
+
+classes = ['Amarant', 'Cabbage', 'Watercress']
 
 
 def cv2_to_pil(img_cv2):
@@ -22,8 +25,9 @@ def pil_to_cv2(img_pil):
     return tmp
 
 
-def crop_img():
-    img = Image.open('document_2.jpg')
+def crop_img(number):
+    docs = ['document_1.jpg','document_2.jpg','document_3.jpg']   
+    img = Image.open(docs[number])
     tmp = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     height, width, chans = tmp.shape
     image = tmp
@@ -76,15 +80,19 @@ def load_model():
     return tf.keras.models.load_model("proj.h5")
 
 
-model = load_model()
-images = slice_image(cv2_to_pil(crop_img()), 224, tmp)
-predictions = []
-for img in images:
-    image = read_and_preprocess_image(img)
-    predictions.append(np.argmax(model.predict(image)))
-counter = Counter(predictions)
-most_common_element = counter.most_common(1)[0][0]
-classes = ['Amarant', 'Cabbage', 'Watercress']
+def predict(number):
+    global classes
+    model = load_model()
+    images = slice_image(cv2_to_pil(crop_img(number)), 224, tmp)
+    predictions = []
+    for img in images:
+        image = read_and_preprocess_image(img)
+        predictions.append(np.argmax(model.predict(image)))
+    counter = Counter(predictions)
+    most_common_element = counter.most_common(1)[0][0]
+    return most_common_element
+    
+
 app = FastAPI()
 
 
@@ -93,6 +101,8 @@ def root():
     return {"message": "Hello World"}
 
 
-@app.post("/predict/")
-def predict(item: Item):
-    return classes[most_common_element]
+@app.post("/predict1/")
+def predict1(item: Item):
+    number = predict(int(item.text) - 1)
+    return classes[number]
+
