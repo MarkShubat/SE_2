@@ -77,7 +77,7 @@ def load_model():
 
 
 model = load_model()
-images = slice_image(cv2_to_pil(crop_img()),224, tmp)
+images = slice_image(cv2_to_pil(crop_img()), 224, tmp)
 predictions = []
 for img in images:
     image = read_and_preprocess_image(img)
